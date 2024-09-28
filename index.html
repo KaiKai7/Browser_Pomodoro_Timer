@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(45deg, #ff6f91, #ff9a44, #f6d365, #fda085, #8fd3f4, #e3a8ff, #ff6fd8, #ffcc29);
+            background-size: 400% 400%;
+            animation: gradient 5s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            25% { background-position: 50% 0%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 100%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        #timer-display {
+            font-size: 4rem;
+            margin: 20px 0;
+            color: #ff6f91;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            background-color: #ff9a44;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #fda085;
+        }
+
+        .break-buttons {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="timer-title">Pomodoro Timer</h1>
+        <div id="timer-display">25:00</div>
+        <button id="startPomodoroBtn">Start Pomodoro (25 mins)</button>
+        <button id="resetBtn">Reset</button>
+        <div class="break-buttons">
+            <button id="break15Btn">I'm taking a 15 minute break</button>
+            <button id="break60Btn">I'm taking an hour lunch break</button>
+        </div>
+        <!-- Add an audio element -->
+        <audio id="notification-sound" src="notification.mp3"></audio>
+    </div>
+
+    <script>
+        let timer;
+        let timeLeft;
+        const display = document.getElementById('timer-display');
+        const timerTitle = document.getElementById('timer-title');
+        const notificationSound = document.getElementById('notification-sound');
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            display.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function startTimer(duration, title) {
+            clearInterval(timer); // Clear any existing timer
+            timeLeft = duration;
+            timerTitle.textContent = title; // Update the title based on the button pressed
+            timer = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                } else {
+                    clearInterval(timer);
+                    display.textContent = "Time for a break!";
+                    notificationSound.play(); // Play the notification sound
+                    timer = null;
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timer = null;
+            timeLeft = 25 * 60; // Reset to 25 minutes
+            updateDisplay();
+            timerTitle.textContent = "Pomodoro Timer"; // Reset title back to Pomodoro Timer
+        }
+
+        // Event Listeners for the timers
+        document.getElementById('startPomodoroBtn').addEventListener('click', () => startTimer(25 * 60, "Pomodoro Timer"));
+        document.getElementById('break15Btn').addEventListener('click', () => startTimer(15 * 60, "15 Minute Break"));
+        document.getElementById('break60Btn').addEventListener('click', () => startTimer(60 * 60, "1 Hour Lunch Break"));
+        document.getElementById('resetBtn').addEventListener('click', resetTimer);
+  
+        // Initial display update (sets the default display to 25 minutes)
+        resetTimer();
+    </script>
+</body>
+</html>
