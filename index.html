@@ -88,11 +88,11 @@
             <button id="break60Btn">I'm taking an hour lunch break</button>
         </div>
         <!-- Add an audio element -->
-        <audio id="notification-sound" src="/notification.mp3" preload="auto"></audio>
+        <audio id="notification-sound" src="notification.mp3"></audio>
     </div>
 
     <!-- Notification Sound Button -->
-    <button class="notification-sound-btn" id="playNotificationSoundBtn">Play Notification Sound</button>
+    <button class="notification-sound-btn" id="playNotificationSoundBtn">Notification Sound</button>
 
     <script>
         let timer;
@@ -100,7 +100,6 @@
         const display = document.getElementById('timer-display');
         const timerTitle = document.getElementById('timer-title');
         const notificationSound = document.getElementById('notification-sound');
-        const playNotificationSoundBtn = document.getElementById('playNotificationSoundBtn');
 
         function updateDisplay() {
             const minutes = Math.floor(timeLeft / 60);
@@ -139,16 +138,13 @@
         document.getElementById('break60Btn').addEventListener('click', () => startTimer(60 * 60, "1 Hour Lunch Break"));
         document.getElementById('resetBtn').addEventListener('click', resetTimer);
 
-        // Toggle notification sound play/pause
-        playNotificationSoundBtn.addEventListener('click', () => {
-            if (notificationSound.paused) {
-                notificationSound.play();
-                playNotificationSoundBtn.textContent = "Stop Notification Sound";
-            } else {
+        // Play notification sound for 5 seconds when the "Notification Sound" button is clicked
+        document.getElementById('playNotificationSoundBtn').addEventListener('click', () => {
+            notificationSound.play();
+            setTimeout(() => {
                 notificationSound.pause();
-                notificationSound.currentTime = 0; // Reset to the start of the sound
-                playNotificationSoundBtn.textContent = "Play Notification Sound";
-            }
+                notificationSound.currentTime = 0; // Reset the audio to the beginning
+            }, 5000); // Stop playing after 5 seconds
         });
 
         // Initial display update (sets the default display to 25 minutes)
