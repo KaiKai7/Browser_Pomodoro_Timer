@@ -8,6 +8,7 @@
         body {
             font-family: 'Arial', sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -66,6 +67,14 @@
         .break-buttons {
             margin-top: 20px;
         }
+
+        /* Styles for the notification sound button */
+        .notification-sound-btn {
+            position: absolute;
+            bottom: 10px;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+        }
     </style>
 </head>
 <body>
@@ -81,6 +90,9 @@
         <!-- Add an audio element -->
         <audio id="notification-sound" src="/notification.mp3"></audio>
     </div>
+
+    <!-- Notification Sound Button -->
+    <button class="notification-sound-btn" id="playNotificationSoundBtn">Notification Sound</button>
 
     <script>
         let timer;
@@ -125,7 +137,12 @@
         document.getElementById('break15Btn').addEventListener('click', () => startTimer(15 * 60, "15 Minute Break"));
         document.getElementById('break60Btn').addEventListener('click', () => startTimer(60 * 60, "1 Hour Lunch Break"));
         document.getElementById('resetBtn').addEventListener('click', resetTimer);
-  
+
+        // Play notification sound when the "Notification Sound" button is clicked
+        document.getElementById('playNotificationSoundBtn').addEventListener('click', () => {
+            notificationSound.play();
+        });
+
         // Initial display update (sets the default display to 25 minutes)
         resetTimer();
     </script>
